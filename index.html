@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#142b2c" />
+    <meta
+      name="description"
+      content="Uma ponte desmoronando. Um carro. Uma chance. Desvie dos obstáculos e chegue ao outro lado neste jogo 3D de corrida."
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>Última Ponte — Chegue ao outro lado.</title>
+    <script type="module" crossorigin src="./assets/index-BmRilXvD.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/three-CAW2Otyv.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-DJVvfd64.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="scene" aria-label="Pista de corrida 3D sobre o mar"></div>
+      <div class="vignette"></div>
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Última Ponte, início">
+          <svg viewBox="0 0 36 32" fill="none" aria-hidden="true">
+            <path
+              d="M3 27V11M33 27V11M10 27V3M26 27V3M3 12C14 22 22 22 33 12M3 23H33"
+              stroke="currentColor"
+              stroke-width="2.2"
+            />
+            <path
+              d="M10 4C15 11 21 11 26 4"
+              stroke="currentColor"
+              stroke-width="2.2"
+            />
+          </svg>
+          <span>ÚLTIMA<span class="brand-light">PONTE</span></span>
+        </a>
+        <div class="top-actions">
+          <span class="status-label"><i></i> SOBREVIVA À TRAVESSIA</span>
+          <button
+            id="sound-button"
+            class="icon-button"
+            aria-label="Ativar som"
+            title="Ativar som"
+            aria-pressed="false"
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M11 5 6 9H3v6h3l5 4V5Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+              />
+              <path
+                class="sound-waves"
+                d="M15 8c2 2 2 6 0 8m3-11c4 4 4 10 0 14"
+                stroke="currentColor"
+                stroke-width="1.6"
+              />
+              <path
+                class="sound-mute"
+                d="m16 9 6 6m0-6-6 6"
+                stroke="currentColor"
+                stroke-width="1.6"
+              />
+            </svg>
+          </button>
+          <button
+            id="pause-button"
+            class="icon-button hidden"
+            aria-label="Pausar jogo"
+            title="Pausar (Esc)"
+          >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M8 5v14M16 5v14"
+                stroke="currentColor"
+                stroke-width="3"
+              />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main id="menu" class="menu">
+        <div class="hero">
+          <p class="eyebrow"><span></span> O CAMINHO É SÓ PARA FRENTE</p>
+          <h1>A ÚLTIMA<br /><em>TRAVESSIA.</em></h1>
+          <p class="intro">
+            A ponte está caindo. O tempo, acabando.<br />Pise fundo e chegue ao
+            outro lado.
+          </p>
+          <button id="start-button" class="primary-button">
+            <span>ACELERAR</span
+            ><svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M4 12h15m-6-6 6 6-6 6"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+            </svg>
+          </button>
+          <div class="play-note">
+            <span class="key miniature">↔</span> TECLADO OU TOQUE
+            <span class="note-dot">·</span> SEM INSTALAÇÃO
+          </div>
+          <div class="how-to">
+            <div>
+              <span class="step-number">01</span
+              ><span
+                ><strong>Desvie.</strong
+                ><small>O caminho não está livre.</small></span
+              >
+            </div>
+            <div>
+              <span class="step-number">02</span
+              ><span
+                ><strong>Acelere.</strong
+                ><small>Use o nitro na hora certa.</small></span
+              >
+            </div>
+            <div>
+              <span class="step-number">03</span
+              ><span
+                ><strong>Sobreviva.</strong
+                ><small>Não olhe para trás.</small></span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="scene-caption">
+          <span class="coordinate">23° 33′ S &nbsp; 46° 38′ W</span
+          ><span class="caption-line"></span><strong>PONTE DO HORIZONTE</strong
+          ><small>1,6 KM ATÉ A LIBERDADE</small>
+        </div>
+        <div class="menu-footer">
+          <span>UMA CORRIDA CONTRA O COLAPSO.</span
+          ><span id="best-label">SEU RECORDE COMEÇA AQUI <span>↗</span></span>
+        </div>
+      </main>
+
+      <section id="hud" class="hud hidden" aria-label="Informações da corrida">
+        <div
+          id="rear-view"
+          class="rear-view"
+          aria-label="Retrovisor: ponte desmoronando atrás do carro"
+        >
+          <span>ATRÁS DE VOCÊ</span>
+        </div>
+        <div class="race-top">
+          <div class="distance-panel">
+            <div class="hud-label">
+              ATÉ O OUTRO LADO <span id="distance-label">1.600 M</span>
+            </div>
+            <div class="progress-track">
+              <div id="race-progress"></div>
+              <span class="finish-mark">⚑</span>
+            </div>
+          </div>
+          <div class="health-panel">
+            <span class="hud-label">INTEGRIDADE</span>
+            <div id="health" aria-label="3 pontos de integridade">
+              <i></i><i></i><i></i>
+            </div>
+          </div>
+        </div>
+        <div id="danger" class="danger">
+          <span class="danger-dot"></span><span>COLAPSO</span
+          ><strong id="gap-label">42 M</strong>
+          <div class="danger-track"><i id="danger-fill"></i></div>
+        </div>
+        <div id="toast" class="toast" role="status"></div>
+        <div class="speed-panel">
+          <span id="speed-label">0</span><span class="speed-unit">KM/H</span
+          ><small>ACELERAÇÃO AUTOMÁTICA</small>
+        </div>
+        <div class="nitro-panel">
+          <div class="hud-label">NITRO <span id="nitro-label">100%</span></div>
+          <div class="nitro-track"><i id="nitro-fill"></i></div>
+          <span class="keyboard-hint">SEGURE <kbd>ESPAÇO</kbd></span>
+        </div>
+        <div class="touch-controls">
+          <div class="steer-controls">
+            <button
+              id="left-button"
+              class="drive-button"
+              aria-label="Virar à esquerda"
+            >
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <path d="m20 7-9 9 9 9" />
+              </svg></button
+            ><button
+              id="right-button"
+              class="drive-button"
+              aria-label="Virar à direita"
+            >
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <path d="m12 7 9 9-9 9" />
+              </svg>
+            </button>
+          </div>
+          <button
+            id="nitro-button"
+            class="nitro-button"
+            aria-label="Usar nitro"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m14 2-9 12h6l-1 8 9-13h-6l1-7Z" /></svg
+            ><span>NITRO</span>
+          </button>
+        </div>
+        <div class="desktop-hint">
+          <kbd>A</kbd><kbd>D</kbd> OU <kbd>←</kbd><kbd>→</kbd> PARA DIRIGIR
+        </div>
+      </section>
+
+      <section
+        id="overlay"
+        class="overlay hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="overlay-title"
+      >
+        <div class="result-card">
+          <span id="result-eyebrow" class="eyebrow"
+            >RESPIRA. AINDA DÁ TEMPO.</span
+          >
+          <h2 id="overlay-title">PIT STOP.</h2>
+          <p id="result-message">Sua corrida está pausada.</p>
+          <div id="result-stats" class="result-stats hidden">
+            <div>
+              <span>DISTÂNCIA</span><strong id="result-distance"></strong>
+            </div>
+            <div><span>TEMPO</span><strong id="result-time"></strong></div>
+            <div><span>RECORDE</span><strong id="result-best"></strong></div>
+          </div>
+          <button id="resume-button" class="primary-button">
+            <span>CONTINUAR</span><span>→</span></button
+          ><button id="restart-button" class="primary-button hidden">
+            <span>TENTAR DE NOVO</span><span>↗</span></button
+          ><button id="menu-button" class="text-button">
+            VOLTAR AO INÍCIO
+          </button>
+        </div>
+      </section>
+      <div id="loading" class="loading">
+        <span class="loader"></span><span>PREPARANDO A TRAVESSIA</span>
+      </div>
+      <div id="webgl-error" class="webgl-error hidden" role="alert">
+        <h2>A pista precisa de 3D.</h2>
+        <p>
+          Não foi possível iniciar o WebGL. Tente um navegador atualizado com
+          aceleração gráfica ativada.
+        </p>
+        <button class="primary-button" onclick="location.reload()">
+          TENTAR NOVAMENTE
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
